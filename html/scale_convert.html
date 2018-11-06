@@ -1,0 +1,373 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>进制转换</title>
+</head>
+
+<style type='text/css'>
+
+div#idContainer {
+    margin-top: 1px;
+    width: 800px;
+    height: 400px;
+}
+
+body {
+    background-color: #323232;
+    color: white;/*字体颜色*/
+    font-family: 'Microsoft Yahei';
+}
+
+div#idLeft1, #idLeft2, #idLeft3, #idLeft4 {
+    float: left;
+    height: 100px;
+    width: 30%;
+}
+
+div#idMark1, #idMark2, #idMark3, #idMark4 {
+    float: left;
+    width: 10%;
+    height: 100px;
+    line-height: 100px;/*与高度相同即可垂直居中*/
+    font-size: 65px;
+    color: #6E6E6E;
+    text-align: right;
+}
+
+div#idRight1, #idRight2, #idRight3, #idRight4 {
+    float: right;
+    height: 100px;
+    width: 60%;
+}
+
+div#idLeft1, #idMark1 {
+    background-color: #9F69B7;
+}
+#idLeft1:hover {
+    //background-color: #7C549D;
+}
+
+div#idRight1 {
+    background-color: #8B4789;
+}
+div#idRight1:hover {
+    background-color: #7B3779;
+}
+
+div#idLeft2, #idMark2 {
+    background-color: #A5B463;
+}
+div#idLeft2:hover {
+    //background-color: #909b51;
+}
+
+div#idRight2 {
+    background-color: #CDC673;
+}
+div#idRight2:hover {
+    background-color: #BDB663;
+}
+
+div#idLeft3, #idMark3 {
+    background-color: #C96C67;
+}
+div#idLeft3:hover {
+    //background-color: #9d5652;
+}
+
+div#idRight3 {
+    background-color: #CD8162;
+}
+div#idRight3:hover {
+    background-color: #BD7152;
+}
+
+div#idLeft4, #idMark4 {
+    background-color: #636363;
+}
+div#idLeft4:hover {
+    //background-color: #4b4b4b;
+}
+
+div#idRight4 {
+    background-color: #838B83;
+}
+div#idRight4:hover {
+    background-color: #737B73;
+}
+
+div#idDecFont , #idHexFont, #idOctFont, #idBinFont{
+text-align: left;
+margin-left: 30px;
+margin-top: 21px;
+line-height: 22px;
+}
+
+input {
+    width: 170px;
+    margin-top: 30px;
+    font-family: 'Microsoft Yahei';
+    background-color: white;
+}
+
+.classFont {
+    color: white;
+    font-family: 'Microsoft Yahei';
+    font-size: 25px;
+}
+
+.classNote {
+    font-size: 13px;
+}
+
+#idLeftHr {
+    float: left;
+    width: 300px;
+    margin-top: 10px;
+}
+#idTitle {
+    float: left;
+    width: 200px;
+    font-family: 'Microsoft Yahei';
+    font-size: 25px;
+    height: 35px;
+    line-height: 35px;
+}
+#idRightHr {
+    float: right;
+    width: 300px;
+    margin-top: 10px;
+}
+
+</style>
+
+<script type='text/javascript'>
+var timerPaste;
+var valueTrans = 0;/*透明值*/
+
+function F_spread_text() {
+    var exNum = 0;
+    var defChangeNum = 20; /*超过该字符个数则开始增长*/
+    var spreadPX = 8;/*每个字符增长的像素大小*/
+    var bin_val = document.getElementById('idBin').value;
+    if (bin_val.length >= defChangeNum) {
+        exNum = bin_val.length - defChangeNum;
+    }
+
+    var setPX = 170 + (spreadPX * exNum); /*默认长度150px,每个字符增长5px*/
+    document.getElementById('idBin').style.width = setPX + 'px';
+}
+
+function F_space_str(obj_id) {
+    var i = 0;
+    var j = 0;
+    var str = document.getElementById(obj_id).value;
+    var outStr = '';
+    var remainder = str.length % 4; /*余数*/
+    var dealer = parseInt(str.length / 4); /*商*/
+
+    if (str.length <= 4) {
+        document.getElementById('idSpaStr').innerHTML = str;
+        return 0;/*小于4个字符无需添加空格*/
+    }
+
+    if (0 == remainder) {/*整除*/
+        for (i = 0, j = 0; j < dealer; i += 4, j++) {
+            outStr += str.substr(i, 4) + ' ';
+        }
+    }
+    else {/*有余数*/
+        for (i = 0, j = 0; j < dealer; ) {
+            if (0 == i) {
+                outStr += str.substr(i, remainder) + ' ';
+                i += remainder;
+            }
+            else {
+                outStr += str.substr(i, 4) + ' ';
+                i += 4;
+                j++;
+            }
+        }
+    }
+
+    outStr = outStr.substr(0, outStr.length-1);/*去掉最后的空格*/
+    document.getElementById('idSpaStr').innerHTML = outStr;
+}
+
+function F_convert(obj_id, obj_sys) {
+    var regDec = /[0-9]/;
+    var regHex = /[0-9]|[a-f]|[A-F]/;
+    var regLittleHex = /[a-f]/;
+    var regOct = /[0-7]/;
+    var regBin = /[0-1]/;
+    var i = 0;
+    var dec_val;
+
+    var obj_val = document.getElementById(obj_id).value;
+    var str = document.getElementById(obj_id).value;
+    if (obj_val == '') {/*空的话不进行转换*/
+        return -1;
+    }
+    switch (obj_sys) {
+        case 10:
+            for (i = 0; i < str.length; i++) {
+                if (!regDec.exec(str.substr(i, 1))) {
+                    F_show_warn(10);/*显示提示信息*/
+                    return -1;
+                }
+            }
+            F_hide_warn();/*隐藏提示信息*/
+            dec_val = parseInt(obj_val, obj_sys);
+            document.getElementById('idHex').value = dec_val.toString(16).toUpperCase();
+            document.getElementById('idOct').value = dec_val.toString(8);
+            document.getElementById('idBin').value = dec_val.toString(2);
+            break;
+        case 16:
+            for (i = 0; i < str.length; i++) {
+                if (!regHex.exec(str.substr(i, 1))) {
+                    F_show_warn(16);/*显示提示信息*/
+                    return -1;
+                }
+            }
+            F_hide_warn();/*隐藏提示信息*/
+            for (i = 0; i < str.length; i++) {
+                if (regLittleHex.exec(str.substr(i, 1))) {
+                    document.getElementById('idHex').value = obj_val.toUpperCase(); /*16进制的先将其转换成大写*/
+                }
+            }
+            dec_val = parseInt(obj_val, obj_sys);
+            document.getElementById('idDec').value = dec_val;
+            document.getElementById('idOct').value = dec_val.toString(8);
+            document.getElementById('idBin').value = dec_val.toString(2);
+            break;
+        case 8:
+            for (i = 0; i < str.length; i++) {
+                if (!regOct.exec(str.substr(i, 1))) {
+                    F_show_warn(8);/*显示提示信息*/
+                    return -1;
+                }
+            }
+            F_hide_warn();/*隐藏提示信息*/
+            dec_val = parseInt(obj_val, obj_sys);
+            document.getElementById('idDec').value = dec_val;
+            document.getElementById('idHex').value = dec_val.toString(16).toUpperCase();
+            document.getElementById('idBin').value = dec_val.toString(2);
+            break;
+        case 2:
+            for (i = 0; i < str.length; i++) {
+                if (!regBin.exec(str.substr(i, 1))) {
+                    F_show_warn(2);/*显示提示信息*/
+                    return -1;
+                }
+            }
+            F_hide_warn();/*隐藏提示信息*/
+            dec_val = parseInt(obj_val, obj_sys);
+            document.getElementById('idDec').value = dec_val;
+            document.getElementById('idHex').value = dec_val.toString(16).toUpperCase();
+            document.getElementById('idOct').value = dec_val.toString(8);
+            break;
+    }
+
+    F_spread_text();
+    F_space_str('idBin');
+    clearInterval(timerPaste);
+
+    return 0;
+}
+
+function F_paste_event(obj_id, obj_sys) {
+    timerPaste = setInterval(function(){F_convert(obj_id, obj_sys);}, 1000);
+}
+
+/*隐藏提示信息*/
+function F_hide_warn() {
+    valueTrans = 0;
+    document.all.idWarn.style.opacity = 0;
+    document.all.idWarn.style.filter = 'Alpha(Opacity=0)';/*for IE*/
+}
+
+/*显示提示信息*/
+function F_show_warn(obj_num) {
+    switch (obj_num) {
+        case 10:
+            document.all.idWarn.innerHTML = '10进制输入：0~9';
+            break;
+        case 16:
+            document.all.idWarn.innerHTML = '16进制输入：0~9/a~f/A~F';
+            break;
+        case 8:
+            document.all.idWarn.innerHTML = '8进制输入：0~7';
+            break;
+        case 2:
+            document.all.idWarn.innerHTML = '2进制输入：0/1';
+            break;
+    }
+    valueTrans += 10;
+    document.all.idWarn.style.width = '300px';
+    document.all.idWarn.style.opacity = valueTrans / 100;/*chrome/firefox是以0点几来计算的*/
+    document.all.idWarn.style.filter = 'Alpha(Opacity=' + valueTrans + ')';/*IE是以0-100来计算的*/
+    if (valueTrans < 100) {
+        setTimeout(function(){F_show_warn(obj_num);}, 90);
+    }
+}
+
+function F_mouse_move(obj_num) {
+    switch (obj_num) {
+        case 1:
+            document.all.idMark1.style.backgroundColor = '#8F59A7';
+            document.all.idLeft1.style.backgroundColor = '#8F59A7';
+            break;
+        case 2:
+            document.all.idMark2.style.backgroundColor = '#95A453';
+            document.all.idLeft2.style.backgroundColor = '#95A453';
+            break;
+        case 3:
+            document.all.idMark3.style.backgroundColor = '#B95C57';
+            document.all.idLeft3.style.backgroundColor = '#B95C57';
+            break;
+        case 4:
+            document.all.idMark4.style.backgroundColor = '#535353';
+            document.all.idLeft4.style.backgroundColor = '#535353';
+            break;
+    }
+}
+
+function F_mouse_out(obj_num) {
+    switch (obj_num) {
+        case 1:
+            document.all.idMark1.style.backgroundColor = '#9F69B7';
+            document.all.idLeft1.style.backgroundColor = '#9F69B7';
+            break;
+        case 2:
+            document.all.idMark2.style.backgroundColor = '#A5B463';
+            document.all.idLeft2.style.backgroundColor = '#A5B463';
+            break;
+        case 3:
+            document.all.idMark3.style.backgroundColor = '#C96C67';
+            document.all.idLeft3.style.backgroundColor = '#C96C67';
+            break;
+        case 4:
+            document.all.idMark4.style.backgroundColor = '#636363';
+            document.all.idLeft4.style.backgroundColor = '#636363';
+            break;
+    }
+}
+
+function F_onload() {
+    F_hide_warn();/*页面加载隐藏提示信息*/
+}
+</script>
+
+<body onload="F_onload();">
+<center>
+    <div id='idWarn' style='width:0px; height:30px; line-height:30px; background-color:#CD5C5C'></div>
+    <div id='idContainer'>
+        <div id='idLeftHr'><hr /></div><div id='idTitle'>进制转换</div><div id='idRightHr'><hr /></div><br /><br /><br />
+        <div id='idMark1' onmousemove="F_mouse_move(1);" onmouseout="F_mouse_out(1);">10</div><div id='idLeft1' onmousemove="F_mouse_move(1);" onmouseout="F_mouse_out(1);"><div id='idDecFont'><font class='classFont'>10进制</font><br /><font class='classNote'>输入：0~9<br />最长10个字符</font></div></div><div id='idRight1'><input type='text' maxlength='10' id='idDec' onkeyup="F_convert(id, 10);" onpaste="F_paste_event(id, 10);" /></div><br />
+        <div id='idMark2' onmousemove="F_mouse_move(2);" onmouseout="F_mouse_out(2);">16</div><div id='idLeft2' onmousemove="F_mouse_move(2);" onmouseout="F_mouse_out(2);"><div id='idHexFont'><font class='classFont'>16进制</font><br /><font class='classNote'>输入：0~9/a~f/A~F<br />最长10个字符</font></div></div><div id='idRight2'><input type='text' maxlength='10' id='idHex'  onkeyup="F_convert(id, 16);" onpaste="F_paste_event(id, 16);" /></div><br />
+        <div id='idMark3' onmousemove="F_mouse_move(3);" onmouseout="F_mouse_out(3);">8</div><div id='idLeft3' onmousemove="F_mouse_move(3);" onmouseout="F_mouse_out(3);"><div id='idOctFont'><font class='classFont'>8进制</font><br /><font class='classNote'>输入：0~7<br />最长10个字符</font></div></div><div id='idRight3'><input type='text' maxlength='10' id='idOct'  onkeyup="F_convert(id, 8);" onpaste="F_paste_event(id, 8);" /></div><br />
+        <div id='idMark4' onmousemove="F_mouse_move(4);" onmouseout="F_mouse_out(4);">2</div><div id='idLeft4' onmousemove="F_mouse_move(4);" onmouseout="F_mouse_out(4);"><div id='idBinFont'><font class='classFont'>2进制</font><br /><font class='classNote'>输入：0/1<br />最长40个字符</font></div></div><div id='idRight4'><input type='text' maxlength='40' id='idBin' onkeyup="F_convert(id, 2);" onpaste="F_paste_event(id, 2);" /><br /><span id='idSpaStr'></span></div><br />
+    </div>
+</center>
+</body>
+</html>

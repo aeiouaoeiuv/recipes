@@ -2,6 +2,9 @@
 
 config_file="/tmp/.scpscript.conf"
 
+# supports backspace key
+stty erase ^H
+
 set_config() {
     read -p "Enter username: " username
     read -p "Enter serverip: " serverip

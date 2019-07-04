@@ -16,7 +16,7 @@ fi
 realfile_dir=$1
 softlink_dir=$2
 
-if [ ! -d ${realfile_dir} -o ! -d ${softlink_dir} ]; then
+if [ ! -d ${realfile_dir} ]; then
     print_usage
     exit 1
 fi

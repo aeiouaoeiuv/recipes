@@ -21,6 +21,11 @@ if [ ! -d ${realfile_dir} ]; then
     exit 1
 fi
 
+if [ "${realfile_dir:0:1}" == "." ]; then
+    # It's relative path, convert to absolute path
+    realfile_dir="$PWD/${realfile_dir}"
+fi
+
 list=`find ${realfile_dir} -not -path "*/.git*" -not -path "*/.svn*" | sed -e "s|^${realfile_dir}|\/.\/|g"`
 for v in ${list}; do
     if [ -d "${realfile_dir}${v}" ]; then

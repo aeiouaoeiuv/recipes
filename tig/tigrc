@@ -119,7 +119,7 @@ set show-notes			= yes		# When non-bool passed as `--show-notes=...` (diff)
 #set mailmap			= yes		# Use .mailmap to show canonical name and email address
 
 # Misc
-set refresh-mode		= auto		# Enum: manual, auto, after-command, periodic
+set refresh-mode        = manual    # Enum: manual, auto, after-command, periodic
 set refresh-interval		= 10		# Interval in seconds between refreshes
 set ignore-case			= no		# Enum: no, yes, smart-case
 						# Ignore case when searching? Smart-case option will
@@ -224,6 +224,7 @@ bind status	M	status-merge		# Open git-mergetool(1)
 bind status N   !@git add -N %(file)
 bind status D   !@?rm %(file)
 bind status P   !git push origin
+bind status <F4> !sh -c "git difftool -y \"$(git rev-parse --show-toplevel)/%(file)\""
 #bind status	???	:toggle status		# Show short or long status labels
 bind stage	u	status-update		# Stage/unstage current diff (c)hunk
 bind stage	1	stage-update-line	# Stage/unstage current line

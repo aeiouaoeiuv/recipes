@@ -1,0 +1,67 @@
+"""""""""""""""" Vundle settings
+" required
+set nocompatible
+filetype off
+
+set rtp+=~/.vim/bundle/Vundle.vim " set the runtime path to include Vundle and initialize
+call vundle#begin()
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'ShowTrailingWhitespace'
+Plugin 'tablify'
+Plugin 'luochen1990/rainbow'
+
+call vundle#end()
+filetype plugin indent on " required
+
+"""""""""""""""" plugins settings
+
+set t_Co=256 " 256 color for xshell, same effect with: export TERM=xterm-256color
+let g:airline_powerline_fonts = 1 " enable powerline fonts
+let g:airline_theme = 'kolor' " airline theme
+let g:airline#extensions#tabline#enabled = 1 " airline with tab on head
+let g:rainbow_active = 1 " enable rainbow, 0 if you want to enable it later via :RainbowToggle
+
+"""""""""""""""" Other settings
+
+set hidden " allow switch buffer if unsaved
+set nowrap " no wrap
+set hlsearch " highlight search
+set incsearch " highlight characters on typing when searching
+set scrolloff=16 " lines about cursor margin top and margin bottom
+syntax on " highlight syntax
+set ffs=unix " CR dispaly as ^M
+colorscheme peachpuff " color scheme
+
+" inherit indent style
+" execute 'set paste' on pasting, and execute 'set nopaste' after pasting
+" Or shortcut key for paste mode
+set autoindent
+
+" tabs width
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+
+"""""""""""""""" key map
+
+set pastetoggle=<C-p> " paste mode
+
+" Esc shortcut
+inoremap jk <Esc>
+
+" remove tailing spaces
+nnoremap <F12> :%s/\s\+$//<cr>:let @/=''<CR>
+
+" switch to previous vim buffer
+nnoremap <F3> :bp<cr>
+
+" switch to next vim buffer
+nnoremap <F4> :bn<cr>
+
+" close current vim buffer
+nnoremap <F5> :bd<cr>
+

@@ -67,13 +67,13 @@
 #    - commit-title-overflow (boolint)	: Highlight overflow in log and diff view?
 #
 
-set blame-view	= id:yes,color file-name:auto author:full date:default line-number:yes,interval=1 text
+set blame-view	= id:yes,color file-name:auto author:full date:custom,format="%F %T %Z" line-number:yes,interval=1 text
 set grep-view	= file-name:no line-number:yes,interval=1 text
-set main-view	= line-number:no,interval=5 id:no date:default author:full commit-title:yes,graph,refs,overflow=no
-set refs-view	= line-number:no id:no date:default author:full ref commit-title
-set stash-view	= line-number:no,interval=5 id:no date:default author:full commit-title
-set status-view	= line-number:no,interval=5 status:short file-name
-set tree-view	= line-number:no,interval=5 mode author:full file-size date:default id:no file-name
+set main-view	= line-number:no,interval=5 id:no date:custom,format="%F %T %Z" author:full commit-title:yes,graph,refs,overflow=no
+set refs-view	= line-number:no id:no date:custom,format="%F %T %Z" author:full ref commit-title
+set stash-view	= line-number:no,interval=5 id:yes date:custom,format="%F %T %Z" author:full commit-title
+set status-view	= line-number:no,interval=5 status:long file-name
+set tree-view	= line-number:no,interval=5 mode author:full file-size:units date:custom,format="%F %T %Z" id:no file-name
 
 # Pager based views
 set pager-view	= line-number:no,interval=5 text
@@ -86,7 +86,7 @@ set diff-view	= line-number:no,interval=5 text:yes,commit-title-overflow=no
 set show-changes		= yes		# Show changes commits in the main view?
 set wrap-lines			= no		# Wrap long lines in pager views?
 set tab-size			= 4		# Number of spaces to use when expanding tabs
-set line-graphics		= default	# Enum: ascii, default, utf-8
+set line-graphics           = default # Enum: ascii, default, utf-8
 set truncation-delimiter	= ~		# Character drawn for truncations, or "utf-8"
 
 # Format reference names based on type.
@@ -104,11 +104,11 @@ set truncation-delimiter	= ~		# Character drawn for truncations, or "utf-8"
 set reference-format		= [branch] <tag> {remote} ~replace~
 
 # Settings controlling how content is read from Git
-set commit-order		= auto		# Enum: auto, default, topo, date, reverse (main)
-set status-show-untracked-dirs	= yes		# Show files in untracked directories? (status)
-set status-show-untracked-files	= yes		# Show untracked files?
-set ignore-space		= no		# Enum: no, all, some, at-eol (diff)
-set show-notes			= yes		# When non-bool passed as `--show-notes=...` (diff)
+set commit-order                = auto      # Enum: auto, default, topo, date, reverse (main)
+set status-show-untracked-dirs  = yes       # Show files in untracked directories? (status)
+set status-show-untracked-files = yes       # Show untracked files?
+set ignore-space                = no        # Enum: no, all, some, at-eol (diff)
+set show-notes                  = yes       # When non-bool passed as `--show-notes=...` (diff)
 #set diff-context		= 3		# Number of lines to show around diff changes (diff)
 #set diff-options		= -C		# User-defined options for `tig show` (git-diff)
 #set diff-highlight		= true		# String (or bool): Path to diff-highlight script,
@@ -119,9 +119,9 @@ set show-notes			= yes		# When non-bool passed as `--show-notes=...` (diff)
 #set mailmap			= yes		# Use .mailmap to show canonical name and email address
 
 # Misc
-set refresh-mode        = manual    # Enum: manual, auto, after-command, periodic
-set refresh-interval		= 10		# Interval in seconds between refreshes
-set ignore-case			= no		# Enum: no, yes, smart-case
+set refresh-mode        = auto          # Enum: manual, auto, after-command, periodic
+set refresh-interval    = 10            # Interval in seconds between refreshes
+set ignore-case         = no            # Enum: no, yes, smart-case
 						# Ignore case when searching? Smart-case option will
 set wrap-search			= yes		# Wrap around to top/bottom of view when searching
 set focus-child			= yes		# Move focus to child view when opened?

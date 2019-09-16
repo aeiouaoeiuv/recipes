@@ -186,20 +186,20 @@ bind refs	!	?git branch -D %(branch)
 # ---------------
 
 # View switching
-bind generic	m	view-main
-bind generic	d	view-diff
-bind generic	l	view-log
-bind generic	t	view-tree
-bind generic	f	view-blob
-bind generic	b	view-blame
-bind generic	r	view-refs
-bind generic	p	view-pager
-bind generic	h	view-help
-bind generic	s	view-status
-bind generic	S	view-status		# Compat binding to avoid going crazy!
-bind generic	c	view-stage
-bind generic	y	view-stash
-#bind generic	g	view-grep
+bind generic    m    view-main
+bind generic    d    view-diff
+bind generic    l    view-log
+bind generic    t    view-tree
+bind generic    f    view-blob
+bind generic    b    view-blame
+bind generic    r    view-refs
+#bind generic    p    view-pager
+bind generic    h    view-help
+bind generic    s    view-status
+bind generic    S    view-status    # Compat binding to avoid going crazy!
+#bind generic    c    view-stage
+bind generic    y    view-stash
+#bind generic    g    view-grep
 
 # View manipulation
 bind generic	<Enter>	enter			# Enter and open selected entry
@@ -238,6 +238,7 @@ bind diff	[	:toggle diff-context -1
 bind diff	]	:toggle diff-context +1
 #bind main	G	:toggle commit-title-graph # Toggle revision graph visualization
 bind main	F	:toggle commit-title-refs  # Toggle reference display (tags/branches)
+bind main	P	!git push origin
 
 # Cursor navigation
 bind generic	j	move-down

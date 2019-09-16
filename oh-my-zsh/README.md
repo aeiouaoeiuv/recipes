@@ -1,0 +1,4 @@
+# LOCATION
+
+`~/.oh-my-zsh/themes/agnoster.zsh-theme`
+

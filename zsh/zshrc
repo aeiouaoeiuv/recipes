@@ -70,6 +70,7 @@ DISABLE_AUTO_UPDATE="true"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
     git
+	jump
     zsh-autosuggestions
     zsh-syntax-highlighting # must be the last plugin sourced
 )
@@ -122,4 +123,8 @@ export LESS_TERMCAP_ue=$'\E[0m'
 if [ -e $HOME/.ls_colors ]; then
     eval $( dircolors -b $HOME/.ls_colors )
 fi
+
+alias j="jump"
+
+setopt rmstarsilent
 

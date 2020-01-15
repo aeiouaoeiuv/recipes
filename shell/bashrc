@@ -51,9 +51,9 @@ function rscolor() { # reset color
 set_prompt() {
     local git_info="$(__git_ps1 %s)"
     if [ -z ${git_info} ]; then
-        PS1="$(fgcolor 251)$(bgcolor 31) \w $(fgcolor 31)$(defbgcolor)${SEPARATER}$(rscolor) "
+        PS1="$(fgcolor 251)$(bgcolor 24) \w $(fgcolor 24)$(defbgcolor)${SEPARATER}$(rscolor) "
     else
-        PS1="$(fgcolor 251)$(bgcolor 31) \w $(fgcolor 31)$(bgcolor 148)${SEPARATER}$(fgcolor 24)$(bgcolor 148)$(boldtext) ${VER_CTRL_BRANCH} ${git_info} $(fgcolor 148)$(defbgcolor)${SEPARATER}$(rscolor) "
+        PS1="$(fgcolor 251)$(bgcolor 24) \w $(fgcolor 24)$(bgcolor 228)${SEPARATER}$(fgcolor 24)$(bgcolor 228)$(boldtext) ${VER_CTRL_BRANCH} ${git_info} $(fgcolor 228)$(defbgcolor)${SEPARATER}$(rscolor) "
     fi
 }
 PROMPT_COMMAND=set_prompt

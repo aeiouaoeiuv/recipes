@@ -1,11 +1,11 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
 print_usage() {
     printf "Usage:
-    $0 realfile_dir softlink_dir   - supports directory only
-"
+    %s realfile_dir softlink_dir   - supports directory only
+" "$0"
 }
 
 if [ $# != 2 ]; then
@@ -16,7 +16,7 @@ fi
 realfile_dir=$1
 softlink_dir=$2
 
-if [ ! -d ${realfile_dir} ]; then
+if [ ! -d "${realfile_dir}" ]; then
     print_usage
     exit 1
 fi
@@ -26,7 +26,7 @@ if [ "${realfile_dir:0:1}" == "." ]; then
     realfile_dir="$PWD/${realfile_dir}"
 fi
 
-list=`find ${realfile_dir} -not -path "*/.git*" -not -path "*/.svn*" | sed -e "s|^${realfile_dir}|\/.\/|g"`
+list=$(find "${realfile_dir}" -not -path "*/.git*" -not -path "*/.svn*" | sed -e "s|^${realfile_dir}|\/.\/|g")
 for v in ${list}; do
     if [ -d "${realfile_dir}${v}" ]; then
         mkdir -p "${softlink_dir}${v}"

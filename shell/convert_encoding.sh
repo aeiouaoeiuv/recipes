@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 Usage() {
 	echo "This tool was only used to convert files between gbk and utf8."

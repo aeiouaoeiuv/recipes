@@ -70,8 +70,9 @@ DISABLE_AUTO_UPDATE="true"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
     git
-	jump
+    jump
     zsh-autosuggestions
+    zsh-history-substring-search
     zsh-syntax-highlighting # must be the last plugin sourced
 )
 
@@ -102,12 +103,14 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-bindkey "^[h" backward-char         # Alt+h
-bindkey "^[j" down-line-or-history  # Alt+j
-bindkey "^[k" up-line-or-history    # Alt+k
-bindkey "^[l" forward-char          # Alt+l
-bindkey "^[." autosuggest-accept    # Alt+.
-bindkey "^J" autosuggest-execute    # Ctrl+J
+bindkey "^[h" backward-char                 # Alt+h
+bindkey "^[j" backward-word                 # Alt+j
+bindkey "^[k" forward-word                  # Alt+k
+bindkey "^[l" forward-char                  # Alt+l
+bindkey "^[." autosuggest-accept            # Alt+.
+bindkey "^J"  autosuggest-execute           # Ctrl+J
+bindkey "^[]" history-substring-search-down # Alt+]
+bindkey "^[[" history-substring-search-up   # Alt+[
 
 [[ $TMUX = "" ]] && export TERM="xterm-256color"
 

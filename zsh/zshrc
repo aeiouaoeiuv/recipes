@@ -149,3 +149,7 @@ alias j="jump"
 
 setopt rmstarsilent
 
+# remove duplicate PATH entries
+# this line comes after export PATH=XXXXXX
+PATH=$(printf %s "$PATH" | awk -vRS=: '!a[$0]++' | paste -s -d:)
+

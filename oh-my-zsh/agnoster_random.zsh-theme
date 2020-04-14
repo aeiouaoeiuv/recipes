@@ -100,10 +100,24 @@ prompt_dir() {
 	if [ -n "${LAST_BG}" -a -n "${LAST_FG}" ]; then
 		prompt_segment ${dir_bg} ${LAST_BG} ${SEGMENT_SEPARATOR}
 	fi
+	local LOCK_CHAR
+	() {
+		local LC_ALL="" LC_CTYPE="en_US.UTF-8"
+		LOCK_CHAR=$'\ue0a2' # 
+	}
+
+	local txt=""
+
+	# check dir writable
+	if [ ! -w "$PWD" ]; then
+		txt+="${LOCK_CHAR} "
+	fi
+
+	txt+="%~" # prompt dir
 
 	LAST_BG="${dir_bg}"
 	LAST_FG="${dir_fg}"
-	prompt_segment ${dir_bg} ${dir_fg} " %~ "
+	prompt_segment ${dir_bg} ${dir_fg} " ${txt} "
 }
 
 prompt_git() {
@@ -111,10 +125,11 @@ prompt_git() {
 	if [[ "$(git config --get oh-my-zsh.hide-status 2>/dev/null)" = 1 ]]; then
 		return
 	fi
-	local PL_BRANCH_CHAR
+	local GIT_CHAR STASH_CHAR
 	() {
 		local LC_ALL="" LC_CTYPE="en_US.UTF-8"
-		PL_BRANCH_CHAR=$'\ue0a0' # 
+		GIT_CHAR=$'\ue0a0' # 
+		STASH_CHAR=$'\u2022' # •
 	}
 
     if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
@@ -122,9 +137,18 @@ prompt_git() {
 			prompt_segment ${git_bg} ${LAST_BG} ${SEGMENT_SEPARATOR}
 		fi
 
+		local txt="${GIT_CHAR} $(__git_ps1 %s)"
+
+		# check stash list
+		if ! $(git rev-parse --is-inside-git-dir); then
+			if [ $(git stash list | wc -l) -gt 0 ]; then
+				txt+=" ${STASH_CHAR}"
+			fi
+		fi
+
 		LAST_BG="${git_bg}"
 		LAST_FG="${git_fg}"
-		prompt_segment "${git_bg}m%}%{\033[1" ${git_fg} " ${PL_BRANCH_CHAR} $(__git_ps1 %s) "
+		prompt_segment "${git_bg}m%}%{\033[1" ${git_fg} " ${txt} "
 	fi
 }
 

@@ -129,7 +129,9 @@ prompt_git() {
 	() {
 		local LC_ALL="" LC_CTYPE="en_US.UTF-8"
 		GIT_CHAR=$'\ue0a0' # 
-		STASH_CHAR=$'\u2022' # •
+		STASH_CHAR=$'\u2731' # ✱
+		STAGE_CHAR=$'\u271a' # ✚
+		UNSTAGE_CHAR=$'\u203c' # ‼
 	}
 
     if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
@@ -139,10 +141,18 @@ prompt_git() {
 
 		local txt="${GIT_CHAR} $(__git_ps1 %s)"
 
-		# check stash list
 		if ! $(git rev-parse --is-inside-git-dir); then
+			# check stash list
 			if [ $(git stash list | wc -l) -gt 0 ]; then
 				txt+=" ${STASH_CHAR}"
+			fi
+
+			# check staged files
+			if [ $(git diff --cached --name-only | wc -l) -gt 0 ]; then
+				txt+=" ${STAGE_CHAR}"
+			# check unstaged files
+			elif [ $(git diff --name-only | wc -l) -gt 0 ]; then
+				txt+=" ${UNSTAGE_CHAR}"
 			fi
 		fi
 

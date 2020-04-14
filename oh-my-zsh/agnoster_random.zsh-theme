@@ -51,7 +51,7 @@
 			read fg_gray_level < <(calc_gray_level ${fg_r} ${fg_g} ${fg_b})
 
 			gray_level_diff=$((${bg_gray_level} - ${fg_gray_level}))
-			if [ ${gray_level_diff} -ge 5000 -o ${gray_level_diff} -le -5000 ]; then
+			if [ ${gray_level_diff} -ge 3000 -o ${gray_level_diff} -le -3000 ]; then
 				fg_color="${fg_r};${fg_g};${fg_b}"
 				break
 			fi

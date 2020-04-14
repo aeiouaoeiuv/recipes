@@ -124,7 +124,7 @@ prompt_git() {
 
 		LAST_BG="${git_bg}"
 		LAST_FG="${git_fg}"
-		prompt_segment ${git_bg} ${git_fg} " ${PL_BRANCH_CHAR} $(__git_ps1 %s) "
+		prompt_segment "${git_bg}m%}%{\033[1" ${git_fg} " ${PL_BRANCH_CHAR} $(__git_ps1 %s) "
 	fi
 }
 

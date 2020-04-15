@@ -86,8 +86,13 @@ prompt_segment() {
 
 prompt_status() {
 	local -a txt
+	() {
+		local LC_ALL="" LC_CTYPE="en_US.UTF-8"
+		JOBS_CHAR=$'\u2699' # ⚙
+	}
+
 	[[ ${RETVAL} -ne 0 ]] && txt+=${RETVAL}
-	[[ $(jobs -l | wc -l) -gt 0 ]] && txt+="⚙"
+	[[ $(jobs -l | wc -l) -gt 0 ]] && txt+="${JOBS_CHAR}"
 
 	if [ -n "${txt}" ]; then
 		LAST_BG="${status_bg}"
@@ -100,20 +105,17 @@ prompt_dir() {
 	if [ -n "${LAST_BG}" -a -n "${LAST_FG}" ]; then
 		prompt_segment ${dir_bg} ${LAST_BG} ${SEGMENT_SEPARATOR}
 	fi
-	local LOCK_CHAR
 	() {
 		local LC_ALL="" LC_CTYPE="en_US.UTF-8"
 		LOCK_CHAR=$'\ue0a2' # 
 	}
 
-	local txt=""
+	local txt="%~" # prompt dir
 
 	# check dir writable
 	if [ ! -w "$PWD" ]; then
-		txt+="${LOCK_CHAR} "
+		txt+=" ${LOCK_CHAR}"
 	fi
-
-	txt+="%~" # prompt dir
 
 	LAST_BG="${dir_bg}"
 	LAST_FG="${dir_fg}"
@@ -125,7 +127,6 @@ prompt_git() {
 	if [[ "$(git config --get oh-my-zsh.hide-status 2>/dev/null)" = 1 ]]; then
 		return
 	fi
-	local GIT_CHAR STASH_CHAR
 	() {
 		local LC_ALL="" LC_CTYPE="en_US.UTF-8"
 		GIT_CHAR=$'\ue0a0' # 

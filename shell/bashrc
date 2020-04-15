@@ -20,27 +20,24 @@ export LESS_TERMCAP_se=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[38;5;11;1m'
 export LESS_TERMCAP_ue=$'\E[0m'
 
-# PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\$\[\033[01;34m\]\w\[\033[00;36m\]$(__git_ps1)\[\033[00m\] '
-
-#### 38;5 for the foreground, then the color number
-#### 48;5 for the background, then the color number
+#### 38;2 for the foreground, then the color number
+#### 48;2 for the background, then the color number
 . $HOME/.git-completion.bash
 . $HOME/.git-prompt.sh
 
 SEPARATER=$'\UE0B0'         # Rightwards black arrowhead
-VER_CTRL_BRANCH=$'\UE0A0'   # Version control branch
 
 function boldtext() { # bold text
     echo "\\[\\033[1m\\]"
 }
 function bgcolor() { # background color
-    echo "\\[\\033[48;5;"$1"m\\]"
+    echo "\\[\\033[48;2;${1}m\\]"
 }
 function defbgcolor() { # default background color
     echo "\\[\\033[49m\\]"
 }
 function fgcolor() { # foreground color
-    echo "\\[\\033[38;5;"$1"m\\]"
+    echo "\\[\\033[38;2;${1}m\\]"
 }
 function reverse() { # reverse foreground color and background color
     echo "\\[\\033[7m\\]"
@@ -48,15 +45,103 @@ function reverse() { # reverse foreground color and background color
 function rscolor() { # reset color
     echo "\\[\\033[0m\\]"
 }
-set_prompt() {
-    local git_info="$(__git_ps1 %s)"
-    if [ -z ${git_info} ]; then
-        PS1="$(fgcolor 251)$(bgcolor 24) \w $(fgcolor 24)$(defbgcolor)${SEPARATER}$(rscolor) "
-    else
-        PS1="$(fgcolor 251)$(bgcolor 24) \w $(fgcolor 24)$(bgcolor 228)${SEPARATER}$(fgcolor 24)$(bgcolor 228)$(boldtext) ${VER_CTRL_BRANCH} ${git_info} $(fgcolor 228)$(defbgcolor)${SEPARATER}$(rscolor) "
+
+prompt_status() {
+    local -a txt
+    local bg="40;121;162"
+    local fg="243;211;89"
+    local JOBS_CHAR=$'\u2699' # ⚙
+
+    [[ ${RETVAL} -ne 0 ]] && txt+=${RETVAL}
+    [[ $(jobs -l | wc -l) -gt 0 ]] && {
+        if [ -n "${txt}" ]; then
+            txt+=" "
+        fi
+        txt+="${JOBS_CHAR}"
+    }
+
+    if [ -n "${txt}" ]; then
+        LAST_FG="${fg}"
+        LAST_BG="${bg}"
+        PS1+="$(fgcolor ${fg})$(bgcolor ${bg}) ${txt} "
     fi
 }
-PROMPT_COMMAND=set_prompt
+
+prompt_dir() {
+    local bg="247;219;9"
+    local fg="182;21;234"
+
+    if [ -n "${LAST_BG}" -a -n "${LAST_FG}" ]; then
+        PS1+="$(fgcolor ${LAST_BG})$(bgcolor ${LAST_FG})${SEPARATER}"
+    fi
+
+    local txt="\w"
+
+    # check dir writable
+    local LOCK_CHAR=$'\UE0A2' #  Closed padlock
+    if [ ! -w "$PWD" ]; then
+        txt+=" ${LOCK_CHAR}"
+    fi
+
+    LAST_BG="${bg}"
+    LAST_FG="${fg}"
+    PS1+="$(fgcolor ${fg})$(bgcolor ${bg}) ${txt} "
+}
+
+prompt_git() {
+    local GIT_CHAR=$'\ue0a0' #  Version control branch
+    local STASH_CHAR=$'\u2731' # ✱
+    local STAGE_CHAR=$'\u271a' # ✚
+    local UNSTAGE_CHAR=$'\u203c' # ‼
+    local bg="31;52;85"
+    local fg="142;184;56"
+
+    if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
+        if [ -n "${LAST_BG}" -a -n "${LAST_FG}" ]; then
+            PS1+="$(fgcolor ${LAST_BG})$(bgcolor ${bg})${SEPARATER}"
+        fi
+
+        local txt="${GIT_CHAR} $(__git_ps1 %s)"
+
+        if ! $(git rev-parse --is-inside-git-dir); then
+            # check stash list
+            if [ $(git stash list | wc -l) -gt 0 ]; then
+                txt+=" ${STASH_CHAR}"
+            fi
+
+            # check staged files
+            if [ $(git diff --cached --name-only | wc -l) -gt 0 ]; then
+                txt+=" ${STAGE_CHAR}"
+            # check unstaged files
+            elif [ $(git diff --name-only | wc -l) -gt 0 ]; then
+                txt+=" ${UNSTAGE_CHAR}"
+            fi
+        fi
+
+        LAST_BG="${bg}"
+        LAST_FG="${fg}"
+        PS1+="$(fgcolor ${fg})$(bgcolor ${bg}) ${txt} "
+    fi
+}
+
+prompt_end() {
+    if [ -n "${LAST_BG}" -a -n "${LAST_FG}" ]; then
+        PS1+="$(fgcolor ${LAST_BG})$(defbgcolor)${SEPARATER}$(rscolor) "
+    fi
+}
+
+build_prompt() {
+    RETVAL=$?
+    LAST_BG=""
+    LAST_FG=""
+    PS1=""
+    prompt_status
+    prompt_dir
+    prompt_git
+    prompt_end
+}
+
+PROMPT_COMMAND=build_prompt
 
 if [ -e $HOME/.ls_colors ]; then
     eval $( dircolors -b $HOME/.ls_colors )

@@ -131,6 +131,9 @@ prompt_git() {
 		local LC_ALL="" LC_CTYPE="en_US.UTF-8"
 		GIT_CHAR=$'\ue0a0' # 
 		STASH_CHAR=$'\u25fc' # ◼
+		STAGE_CHAR=$'\u271a' # ✚
+		UNSTAGE_CHAR=$'\u2217' # ∗
+		UNTRACK_CHAR="?"
 	}
 
     if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
@@ -146,6 +149,28 @@ prompt_git() {
 			if [ $? -eq 0 ]; then
 				txt+=" ${STASH_CHAR}"
 			fi
+
+			for i in {1}; do
+				# check staged files
+				$(git diff --no-ext-diff --quiet --cached)
+				if [ $? -ne 0 ]; then
+					txt+=" ${STAGE_CHAR}"
+					break
+				fi
+
+				# check unstaged files
+				$(git diff --no-ext-diff --quiet)
+				if [ $? -ne 0 ]; then
+					txt+=" ${UNSTAGE_CHAR}"
+					break
+				fi
+
+				# check untracked files
+				if [ ! -z "$(git status --porcelain)" ]; then
+					txt+=" ${UNTRACK_CHAR}"
+					break
+				fi
+			done
 		fi
 
 		LAST_BG="${git_bg}"

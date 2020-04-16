@@ -3,6 +3,13 @@
 () {
 	. ${HOME}/.git-prompt.sh
 
+	# NOTE: This environment was used to control displaying git status info in prompt.
+	# For a huge git repository, showing git status in prompt will be very slow,
+	# especially in a shared folder in virtual machine.
+	# Set to 0 to closing git status info in prompt.
+	# Default is 1.
+	AGNOSTER_RANDOM_GIT_STATUS=1
+
 	local LC_ALL="" LC_CTYPE="en_US.UTF-8"
 	# NOTE: This segment separator character is correct.  In 2012, Powerline changed
 	# the code points they use for their special characters. This is the new code point.
@@ -151,6 +158,10 @@ prompt_git() {
 			fi
 
 			for i in {1}; do
+				if [ "${AGNOSTER_RANDOM_GIT_STATUS}" -eq 0 ]; then
+					break
+				fi
+
 				# check staged files
 				$(git diff --no-ext-diff --quiet --cached)
 				if [ $? -ne 0 ]; then

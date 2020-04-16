@@ -91,6 +91,9 @@ prompt_dir() {
 prompt_git() {
     local GIT_CHAR=$'\ue0a0' #  Version control branch
     local STASH_CHAR=$'\u25fc' # ◼
+    local STAGE_CHAR=$'\u271a' # ✚
+    local UNSTAGE_CHAR=$'\u2217' # ∗
+    local UNTRACK_CHAR="?"
     local bg="31;52;85"
     local fg="142;184;56"
 
@@ -103,10 +106,35 @@ prompt_git() {
 
         if ! $(git rev-parse --is-inside-git-dir); then
             # check stash list
-            $(git rev-parse --verify refs/stash >/dev/null 2>&1)
-            if [ $? -eq 0 ]; then
+            if [ $(git stash list | wc -l) -gt 0 ]; then
                 txt+=" ${STASH_CHAR}"
             fi
+
+            for i in {1}; do
+                if [ "${AGNOSTER_RANDOM_GIT_STATUS}" -eq 0 ]; then
+                    break
+                fi
+
+                # check staged files
+                $(git diff --no-ext-diff --quiet --cached)
+                if [ $? -ne 0 ]; then
+                    txt+=" ${STAGE_CHAR}"
+                    break
+                fi
+
+                # check unstaged files
+                $(git diff --no-ext-diff --quiet)
+                if [ $? -ne 0 ]; then
+                    txt+=" ${UNSTAGE_CHAR}"
+                    break
+                fi
+
+                # check untracked files
+                if [ ! -z "$(git status --porcelain)" ]; then
+                    txt+=" ${UNTRACK_CHAR}"
+                    break
+                fi
+            done
         fi
 
         LAST_BG="${bg}"
@@ -125,6 +153,7 @@ build_prompt() {
     RETVAL=$?
     LAST_BG=""
     LAST_FG=""
+    AGNOSTER_RANDOM_GIT_STATUS=1
     PS1=""
     prompt_status
     prompt_dir

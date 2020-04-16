@@ -3,7 +3,7 @@
 () {
 	. ${HOME}/.git-prompt.sh
 
-	# NOTE: This environment was used to control displaying git status info in prompt.
+	# NOTE: This variable was used to control displaying git status info in prompt.
 	# For a huge git repository, showing git status in prompt will be very slow,
 	# especially in a shared folder in virtual machine.
 	# Set to 0 to closing git status info in prompt.

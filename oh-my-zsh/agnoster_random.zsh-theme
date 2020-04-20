@@ -84,11 +84,30 @@
 LAST_BG=""
 LAST_FG=""
 
+boldtext() { # bold text
+	echo "%{\033[1m%}"
+}
+bgcolor() { # background color
+	echo "%{\033[48;2;${1}m%}"
+}
+defbgcolor() { # default background color
+	echo "%{\033[49m%}"
+}
+fgcolor() { # foreground color
+	echo "%{\033[38;2;${1}m%}"
+}
+reverse() { # reverse foreground color and background color
+	echo "%{\033[7m%}"
+}
+rscolor() { # reset color
+	echo "%{\033[0m%}"
+}
+
 prompt_segment() {
-	local bg="${1}"
-	local fg="${2}"
 	# color codes should be wrapped by %{..%} and normal text should not
-	echo -n "%{\033[48;2;${bg}m%}%{\033[38;2;${fg}m%}${3}"
+	local color="${1}"
+	local txt="${2}"
+	echo -n "${color}${txt}"
 }
 
 prompt_status() {
@@ -104,13 +123,13 @@ prompt_status() {
 	if [ -n "${txt}" ]; then
 		LAST_BG="${status_bg}"
 		LAST_FG="${status_fg}"
-		prompt_segment ${status_bg} ${status_fg} " ${txt} "
+		prompt_segment "$(bgcolor ${status_bg})$(fgcolor ${status_fg})" " ${txt} "
 	fi
 }
 
 prompt_dir() {
 	if [ -n "${LAST_BG}" -a -n "${LAST_FG}" ]; then
-		prompt_segment ${dir_bg} ${LAST_BG} ${SEGMENT_SEPARATOR}
+		prompt_segment "$(bgcolor ${dir_bg})$(fgcolor ${LAST_BG})" ${SEGMENT_SEPARATOR}
 	fi
 	() {
 		local LC_ALL="" LC_CTYPE="en_US.UTF-8"
@@ -126,7 +145,7 @@ prompt_dir() {
 
 	LAST_BG="${dir_bg}"
 	LAST_FG="${dir_fg}"
-	prompt_segment ${dir_bg} ${dir_fg} " ${txt} "
+	prompt_segment "$(bgcolor ${dir_bg})$(fgcolor ${dir_fg})" " ${txt} "
 }
 
 prompt_git() {
@@ -143,9 +162,9 @@ prompt_git() {
 		UNTRACK_CHAR="?"
 	}
 
-    if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
+	if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
 		if [ -n "${LAST_BG}" -a -n "${LAST_FG}" ]; then
-			prompt_segment ${git_bg} ${LAST_BG} ${SEGMENT_SEPARATOR}
+			prompt_segment "$(bgcolor ${git_bg})$(fgcolor ${LAST_BG})" ${SEGMENT_SEPARATOR}
 		fi
 
 		local txt="${GIT_CHAR} $(__git_ps1 %s)"
@@ -186,7 +205,7 @@ prompt_git() {
 
 		LAST_BG="${git_bg}"
 		LAST_FG="${git_fg}"
-		prompt_segment "${git_bg}m%}%{\033[1" ${git_fg} " ${txt} "
+		prompt_segment "$(bgcolor ${git_bg})$(fgcolor ${git_fg})$(boldtext)" " ${txt} "
 	fi
 }
 

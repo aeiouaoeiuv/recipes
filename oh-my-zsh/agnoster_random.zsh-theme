@@ -84,6 +84,7 @@
 LAST_BG=""
 LAST_FG=""
 
+# color codes should be wrapped by %{..%} and normal text should not
 boldtext() { # bold text
 	echo "%{\033[1m%}"
 }
@@ -104,7 +105,6 @@ rscolor() { # reset color
 }
 
 prompt_segment() {
-	# color codes should be wrapped by %{..%} and normal text should not
 	local color="${1}"
 	local txt="${2}"
 	echo -n "${color}${txt}"
@@ -211,8 +211,7 @@ prompt_git() {
 
 prompt_end() {
 	if [ -n "${LAST_BG}" -a -n "${LAST_FG}" ]; then
-		# color codes should be wrapped by %{..%} and normal text should not
-		echo -n "%{${reset_color}%}%{\033[38;2;${LAST_BG}m%}${SEGMENT_SEPARATOR}%{${reset_color}%} "
+		echo -n "$(rscolor)$(fgcolor ${LAST_BG})${SEGMENT_SEPARATOR}$(rscolor) "
 	fi
 }
 
@@ -225,5 +224,5 @@ build_prompt() {
 }
 
 # http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html#Prompt-Expansion or "man zshmisc"
-PROMPT='%{%f%b%k%}$(build_prompt)'
+PROMPT='$(build_prompt)'
 

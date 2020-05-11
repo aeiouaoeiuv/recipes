@@ -6,9 +6,12 @@
 	# NOTE: This variable was used to control displaying git status info in prompt.
 	# For a huge git repository, showing git status in prompt will be very slow,
 	# especially in a shared folder in virtual machine.
-	# Set to 0 to closing git status info in prompt.
-	# Default is 1.
-	AGNOSTER_RANDOM_GIT_STATUS=1
+	# Set to false to closing git status info in prompt.
+	# Default is true.
+	AGNOSTER_RANDOM_GIT_STATUS=true
+
+	# NOTE: This variable was used to control generating random colors or not.
+	AGNOSTER_RANDOM_SET_RANDOM=true
 
 	local LC_ALL="" LC_CTYPE="en_US.UTF-8"
 	# NOTE: This segment separator character is correct.  In 2012, Powerline changed
@@ -76,9 +79,18 @@
 	}
 
 	# this place for shell script will be executed once
-	read status_bg status_fg < <(generate_color_pair)
-	read dir_bg dir_fg < <(generate_color_pair)
-	read git_bg git_fg < <(generate_color_pair)
+	if [ "${AGNOSTER_RANDOM_SET_RANDOM}" = true ]; then
+		read status_bg status_fg < <(generate_color_pair)
+		read dir_bg dir_fg < <(generate_color_pair)
+		read git_bg git_fg < <(generate_color_pair)
+	else
+		status_bg="152;13;57"
+		status_fg="232;209;180"
+		dir_bg="49;75;108"
+		dir_fg="225;140;28"
+		git_bg="190;240;7"
+		git_fg="12;67;28"
+	fi
 }
 
 LAST_BG=""
@@ -177,7 +189,7 @@ prompt_git() {
 			fi
 
 			for i in {1}; do
-				if [ "${AGNOSTER_RANDOM_GIT_STATUS}" -eq 0 ]; then
+				if [ "${AGNOSTER_RANDOM_GIT_STATUS}" = false ]; then
 					break
 				fi
 

@@ -27,8 +27,8 @@ function rscolor() { # reset color
 
 prompt_status() {
 	local -a txt
-	local bg="40;121;162"
-	local fg="243;211;89"
+	local bg="232;77;84"
+	local fg="173;244;63"
 	local JOBS_CHAR="⚙"
 
 	[[ ${RETVAL} -ne 0 ]] && txt+="${RETVAL}"
@@ -47,11 +47,11 @@ prompt_status() {
 }
 
 prompt_dir() {
-	local bg="247;219;9"
-	local fg="182;21;234"
+	local bg="153;233;149"
+	local fg="44;70;127"
 
 	if [ -n "${LAST_BG}" -a -n "${LAST_FG}" ]; then
-		PS1+="$(fgcolor ${LAST_BG})$(bgcolor ${LAST_FG})${SEPARATER}"
+		PS1+="$(fgcolor ${LAST_BG})$(bgcolor ${bg})${SEPARATER}"
 	fi
 
 	local txt="\w"
@@ -73,8 +73,8 @@ prompt_git() {
 	local STAGE_CHAR="✚"
 	local UNSTAGE_CHAR="∗"
 	local UNTRACK_CHAR="?"
-	local bg="31;52;85"
-	local fg="142;184;56"
+	local bg="73;81;165"
+	local fg="187;183;218"
 
 	if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
 		if [ -n "${LAST_BG}" -a -n "${LAST_FG}" ]; then

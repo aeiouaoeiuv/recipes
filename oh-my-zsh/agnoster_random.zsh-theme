@@ -84,12 +84,12 @@
 		read dir_bg dir_fg < <(generate_color_pair)
 		read git_bg git_fg < <(generate_color_pair)
 	else
-		status_bg="152;13;57"
-		status_fg="232;209;180"
-		dir_bg="49;75;108"
-		dir_fg="225;140;28"
-		git_bg="190;240;7"
-		git_fg="12;67;28"
+		status_bg="40;121;162"
+		status_fg="243;211;89"
+		dir_bg="247;219;9"
+		dir_fg="182;21;234"
+		git_bg="175;215;0"
+		git_fg="0;95;135"
 	fi
 }
 

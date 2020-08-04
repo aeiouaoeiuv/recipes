@@ -13,6 +13,7 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'ShowTrailingWhitespace'
 Plugin 'tablify'
 Plugin 'luochen1990/rainbow'
+Plugin 'rakr/vim-one'
 
 call vundle#end()
 filetype plugin indent on " required
@@ -21,7 +22,7 @@ filetype plugin indent on " required
 
 set t_Co=256 " 256 color for xshell, same effect with: export TERM=xterm-256color
 let g:airline_powerline_fonts = 1 " enable powerline fonts
-let g:airline_theme = 'kolor' " airline theme
+let g:airline_theme = 'one' " airline theme
 let g:airline#extensions#tabline#enabled = 1 " airline with tab on head
 let g:rainbow_active = 1 " enable rainbow, 0 if you want to enable it later via :RainbowToggle
 
@@ -43,7 +44,9 @@ set incsearch " highlight characters on typing when searching
 set scrolloff=16 " lines about cursor margin top and margin bottom
 syntax on " highlight syntax
 set ffs=unix " CR dispaly as ^M
-colorscheme peachpuff " color scheme
+colorscheme one " color scheme
+set background=dark
+" hi Normal guibg=NONE ctermbg=NONE " background transparent
 
 " inherit indent style
 " execute 'set paste' on pasting, and execute 'set nopaste' after pasting

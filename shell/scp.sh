@@ -1,4 +1,5 @@
 #!/bin/bash
+# vim:ft=zsh ts=4 sw=4 sts=4
 
 config_file="/tmp/.scpscript.conf"
 
@@ -6,8 +7,8 @@ config_file="/tmp/.scpscript.conf"
 stty erase ^H
 
 set_config() {
-    read -p "Enter username: " username
-    read -p "Enter serverip: " serverip
+    read -r -p "Enter username: " username
+    read -r -p "Enter serverip: " serverip
     echo
 
     cat > ${config_file} << EOF
@@ -20,7 +21,7 @@ check_config() {
     if [ -e ${config_file} ]; then
 		username=$(cat < ${config_file} | grep "username" | awk -F '=' '{print $2}')
 		serverip=$(cat < ${config_file} | grep "serverip" | awk -F '=' '{print $2}')
-        if [ -z "${username}" -o -z "${serverip}" ]; then
+		if [ -z "${username}" ] || [ -z "${serverip}" ]; then
             return 1
         fi
         return 0
@@ -93,16 +94,17 @@ download_file() {
 }
 
 while true; do
-    check_config
-    if [ $? == 0 ]; then
+    if check_config; then
         break
     fi
 
     set_config
 done
 
-ARGS=$(getopt -a -o lcudh -l list,config,upload,download,help -- "$@")
-[ $? -ne 0 ] && print_usage
+
+if ! ARGS=$(getopt -a -o lcudh -l list,config,upload,download,help -- "$@"); then
+	print_usage
+fi
 eval set -- "${ARGS}"
 while true; do
     case "$1" in
@@ -113,8 +115,7 @@ while true; do
     -c|--config)
         while true; do
             set_config
-            check_config
-            if [ $? == 0 ]; then
+            if check_config; then
                 exit 0
             fi
         done

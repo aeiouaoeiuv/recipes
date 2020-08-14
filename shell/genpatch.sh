@@ -1,4 +1,5 @@
 #!/bin/bash
+# vim:ft=zsh ts=4 sw=4 sts=4
 #
 # Install patchutils first
 # Ubuntu: sudo apt install patchutils
@@ -21,8 +22,9 @@ Examples:
 " "$0" "$0" "$0" "$0" "$0"
 }
 
-ARGS=$(getopt -a -o p:h -l strip-num:,help -- "$@")
-[ $? -ne 0 ] && print_usage
+if ! ARGS=$(getopt -a -o p:h -l strip-num:,help -- "$@"); then
+    print_usage
+fi
 eval set -- "${ARGS}"
 while true; do
     case "$1" in
@@ -60,10 +62,10 @@ if [ $# == 1 ]; then
 
     cat < "$1" | filterdiff --remove-timestamps --strip="${strip_num}"
 elif [ $# == 2 ]; then
-    if [ -f "$1" -a -d "$2" ]; then # diff a file to a dir is forbidden
+    if [ -f "$1" ] && [ -d "$2" ]; then
         print_usage
         exit 1
-    elif [ -d "$1" -a -f "$2" ]; then # diff a dir to a file is forbidden
+    elif [ -d "$1" ] && [ -f "$2" ]; then # diff a dir to a file is forbidden
         print_usage
         exit 1
     fi

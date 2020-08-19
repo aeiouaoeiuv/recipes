@@ -11,7 +11,7 @@
 	AGNOSTER_RANDOM_GIT_STATUS=true
 
 	# NOTE: This variable was used to control generating random colors or not.
-	AGNOSTER_RANDOM_SET_RANDOM=true
+	AGNOSTER_RANDOM_SET_RANDOM=false
 
 	local LC_ALL="" LC_CTYPE="en_US.UTF-8"
 	# NOTE: This segment separator character is correct.  In 2012, Powerline changed

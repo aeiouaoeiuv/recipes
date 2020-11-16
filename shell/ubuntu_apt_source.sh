@@ -21,7 +21,7 @@ EOF"
 AptInstallTools()
 {
 	sudo apt update \
-	&& sudo apt -y install gcc g++ perl autoconf libncurses5-dev net-tools
+	&& sudo apt -y install gcc g++ perl autoconf libssl-dev libncurses5-dev net-tools
 }
 
 AptSourceUpdate

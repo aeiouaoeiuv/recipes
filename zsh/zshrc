@@ -148,6 +148,7 @@ fi
 alias j="jump"
 
 setopt rmstarsilent
+setopt no_nomatch
 
 # remove duplicate PATH entries
 # this line comes after export PATH=XXXXXX

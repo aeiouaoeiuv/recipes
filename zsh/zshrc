@@ -78,7 +78,8 @@ alias j="jump"
 setopt rmstarsilent
 setopt no_nomatch
 
-# remove duplicate PATH entries
-# this line comes after export PATH=XXXXXX
-# PATH=$(printf %s "$PATH" | awk -vRS=: '!a[$0]++' | paste -s -d:)
+newpath="$HOME/.local/bin"
+if [[ "${PATH}" != *"${newpath}"* ]]; then
+	export PATH=$PATH:$newpath
+fi
 

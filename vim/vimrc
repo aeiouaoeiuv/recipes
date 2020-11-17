@@ -23,6 +23,10 @@ filetype plugin indent on " required
 set t_Co=256 " 256 color for xshell, same effect with: export TERM=xterm-256color
 let g:airline_powerline_fonts = 1 " enable powerline fonts
 let g:airline_theme = 'one' " airline theme
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_alt_sep = ''
 let g:airline#extensions#tabline#enabled = 1 " airline with tab on head
 let g:rainbow_active = 1 " enable rainbow, 0 if you want to enable it later via :RainbowToggle
 

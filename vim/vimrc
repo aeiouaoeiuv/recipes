@@ -14,6 +14,7 @@ Plugin 'ntpeters/vim-better-whitespace'
 Plugin 'tablify'
 Plugin 'luochen1990/rainbow'
 Plugin 'rakr/vim-one'
+Plugin 'pboettch/vim-cmake-syntax'
 
 call vundle#end()
 filetype plugin indent on " required
@@ -29,6 +30,12 @@ let g:airline_left_alt_sep = ''
 let g:airline_right_alt_sep = ''
 let g:airline#extensions#tabline#enabled = 1 " airline with tab on head
 let g:rainbow_active = 1 " enable rainbow, 0 if you want to enable it later via :RainbowToggle
+
+let g:rainbow_conf = {
+\   'separately': {
+\       'cmake': 0,
+\   }
+\}
 
 """""""""""""""" Other settings
 
@@ -69,15 +76,18 @@ set pastetoggle=<C-p> " paste mode
 " Esc shortcut
 inoremap jk <Esc>
 
-" remove tailing spaces
-nnoremap <F12> :%s/\s\+$//<cr>:let @/=''<CR>
-
 " switch to previous vim buffer
-nnoremap <F3> :bp<cr>
+nnoremap th :bp<cr>
 
 " switch to next vim buffer
-nnoremap <F4> :bn<cr>
+nnoremap tl :bn<cr>
 
 " close current vim buffer
-nnoremap <F5> :bd<cr>
+nnoremap tx :bd<cr>
+
+" convert tab to spaces immediately
+nnoremap <Tab><Space> :set expandtab<cr>:retab<cr>
+
+" remove tailing spaces
+nnoremap t<Space> :%s/\s\+$//<cr>:let @/=''<cr>
 

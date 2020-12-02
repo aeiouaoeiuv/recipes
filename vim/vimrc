@@ -50,6 +50,7 @@ endif
 
 set hidden " allow switch buffer if unsaved
 set nowrap " no wrap
+set nowrapscan " no wrap search
 set hlsearch " highlight search
 set incsearch " highlight characters on typing when searching
 set scrolloff=16 " lines about cursor margin top and margin bottom

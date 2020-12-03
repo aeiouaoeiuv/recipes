@@ -1,4 +1,0 @@
-# LOCATION
-
-`~/.tmux.conf`
-

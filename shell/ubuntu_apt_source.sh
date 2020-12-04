@@ -5,7 +5,7 @@ sourceurl="http://mirrors.aliyun.com/ubuntu/"
 
 AptSourceUpdate()
 {
-	sudo bash -c "cat << EOF > /etc/apt/sources.list
+    sudo bash -c "cat << EOF > /etc/apt/sources.list
 deb     ${sourceurl} ${codename}           main restricted universe multiverse
 deb     ${sourceurl} ${codename}-security  main restricted universe multiverse
 deb     ${sourceurl} ${codename}-updates   main restricted universe multiverse
@@ -21,8 +21,17 @@ EOF"
 
 AptInstallTools()
 {
-	sudo apt update \
-	&& sudo apt -y install gcc g++ perl autoconf libssl-dev libncurses5-dev net-tools openssh-server
+    sudo apt update
+
+    local packages="gcc g++ perl autoconf libssl-dev libncurses5-dev net-tools openssh-server make"
+    local arr=($packages)
+    for p in ${arr[@]}; do
+        if dpkg-query -W -f'${Status}' "$p" >/dev/null 2>&1; then
+            continue # package already installed
+        fi
+
+        sudo apt -y install "$p"
+    done
 }
 
 AptSourceUpdate

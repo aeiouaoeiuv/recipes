@@ -5,7 +5,7 @@ customization:
   modified_time: "Tue Jan 12 14:53:19 2021"
   rime_version: 1.5.3
 patch:
-  "style/color_scheme": solarized_rock
-  "style/font_point": 12
-  "style/horizontal": true
-
+  style/color_scheme: solarized_rock
+  style/font_point: 12
+  style/horizontal: true
+  style/inline_preedit: true

@@ -1,4 +1,4 @@
 patch:
   punctuator/import_preset: symbols.custom
   recognizer/patterns/punct: "^/([A-Z|a-z]*|[0-9]|10)$"
-
+  switches/@0/reset: 1 # 1默认英文, 0默认中文

@@ -52,7 +52,7 @@
                 "colorScheme": "mobaxterm",
                 "cursorColor": "#FEFEFE",
                 "acrylicOpacity": 0.9,
-                "padding": "8, 0, 0, 0",
+                "padding": "0, 0, 0, 0",
                 "useAcrylic": true
             },
             {
@@ -76,7 +76,7 @@
                 "colorScheme": "OneDark",
                 "cursorColor": "#FEFEFE",
                 "acrylicOpacity": 0.9,
-                "padding": "2, 0, 0, 0",
+                "padding": "0, 0, 0, 0",
                 "useAcrylic": true
             }
         ]

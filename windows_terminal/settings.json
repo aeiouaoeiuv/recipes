@@ -15,6 +15,9 @@
     "tabWidthMode": "titleLength",
     "confirmCloseAllTabs": false,
     "theme": "dark",
+    "disabledProfileSources": [
+        "Windows.Terminal.Azure"
+    ],
 
     // You can add more global application settings here.
     // To learn more about global settings, visit https://aka.ms/terminal-global-settings
@@ -63,15 +66,9 @@
                 "hidden": true
             },
             {
-                "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
-                "hidden": true,
-                "name": "Azure Cloud Shell",
-                "source": "Windows.Terminal.Azure"
-            },
-            {
                 "guid": "{2c4de342-38b7-51cf-b940-2309a097f518}",
                 "hidden": false,
-                "name": "PowerShell",
+                "name": "WSL",
                 "source": "Windows.Terminal.Wsl",
                 "colorScheme": "OneDark",
                 "cursorColor": "#FEFEFE",

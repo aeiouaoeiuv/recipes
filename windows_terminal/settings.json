@@ -15,6 +15,7 @@
     "tabWidthMode": "titleLength",
     "confirmCloseAllTabs": false,
     "theme": "dark",
+    "multiLinePasteWarning": false,
     "disabledProfileSources": [
         "Windows.Terminal.Azure"
     ],

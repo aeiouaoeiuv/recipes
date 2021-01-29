@@ -162,17 +162,3 @@
     ]
 }
 
-// 右键打开windows termianl方法
-// 将下列代码保存为reg格式并运行
-// 注意使用crlf换行符，和修改为对应路径
-// 图标可以从这里获得：https://gitee.com/Jioho/img/raw/master/wsl/terminal.ico
-//
-// Windows Registry Editor Version 5.00
-//
-// [HKEY_CLASSES_ROOT\Directory\Background\shell\wt]
-// @="Windows Terminal Here"
-// "Icon"="C:\\Users\\Administrator\\Documents\\windowsterminal.ico"
-//
-// [HKEY_CLASSES_ROOT\Directory\Background\shell\wt\command]
-// @="C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps\\wt.exe"
-

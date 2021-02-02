@@ -145,6 +145,13 @@
         { "command": { "action": "switchToTab", "index": 6 }, "keys": "alt+7" },
         { "command": { "action": "switchToTab", "index": 7 }, "keys": "alt+8" },
         { "command": { "action": "switchToTab", "index": 8 }, "keys": "alt+9" },
+        { "command": "closePane", "keys": "alt+c" },
+        { "command": { "action": "splitPane", "split": "horizontal" }, "keys": "ctrl+alt+-" },
+        { "command": { "action": "splitPane", "split": "vertical" }, "keys": "ctrl+alt+\\" },
+        { "command": { "action": "moveFocus", "direction": "up" }, "keys": "ctrl+alt+k" },
+        { "command": { "action": "moveFocus", "direction": "down" }, "keys": "ctrl+alt+j" },
+        { "command": { "action": "moveFocus", "direction": "left" }, "keys": "ctrl+alt+h" },
+        { "command": { "action": "moveFocus", "direction": "right" }, "keys": "ctrl+alt+l" },
 
         // Copy and paste are bound to Ctrl+Shift+C and Ctrl+Shift+V in your defaults.json.
         // These two lines additionally bind them to Ctrl+C and Ctrl+V.

@@ -64,11 +64,6 @@ dec_dir() {
         exit 0
     fi
 
-    if [ -e "$t/.git" ]; then
-        echo "$t/.git: Aborting"
-        exit 0
-    fi
-
     if [ ! -z "$o" ]; then
         if [ ! -d "$o" ]; then
             mkdir -p "$o"
@@ -76,7 +71,16 @@ dec_dir() {
         local b=$(basename "$t")
         cp -rf "$t" "$o"
         cd "$o/$b"
+
+        if [ -e ".git" ]; then
+            rm -rf .git
+        fi
     else
+        if [ -e "$t/.git" ]; then
+            echo "$t/.git: Aborting"
+            exit 0
+        fi
+
         cd "$t"
     fi
 

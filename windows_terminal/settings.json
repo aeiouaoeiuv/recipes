@@ -41,7 +41,7 @@
             "name": "PowerShell",
             "source": "Windows.Terminal.PowershellCore",
             "cursorShape": "filledBox",
-            "fontFace": "DejaVu Sans Mono for Powerline",
+            "fontFace": "FiraCode Nerd Font",
             "fontSize": 11,
             "padding": "0, 0, 0, 0",
             "useAcrylic": true,

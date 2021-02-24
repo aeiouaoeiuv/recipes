@@ -8,18 +8,22 @@ patch_name="$current_dir/.dada.patch"
 
 print_usage() {
     printf "Usage:
-    -t    target, file or dir
-    -o    output dir
-    -h    this help
+    -t VALUE   target to decode, [VALUE] is file or dir
+    -o VALUE   output dir, [VALUE] is output dir
+    -b         binary mode, only support for target is file, default text mode
+    -h         this help
 "
 }
 
 apply_patch() {
+    git show > "$patch_name"
+    rm -rf * .git
     patch -s -p1 -i "$patch_name"
 }
 
 version_ctrl() {
     if [ -d .git ]; then
+        echo "$t: Please do not handle git directory"
         exit 1
     fi
     git init --quiet
@@ -27,21 +31,26 @@ version_ctrl() {
     git config --local user.email email
     git add .
     git commit -m "initial commit" --quiet
-    git show > "$patch_name"
-    rm -rf * .git
 }
 
 dec_file() {
     local t="$1"
     local o="$2"
+    local binarymode="$3"
     local b=$(basename "$t")
 
     mkdir -p "$hidden_dir"
     cp -f "$t" "$hidden_dir"
     cd "$hidden_dir"
 
-    version_ctrl
-    apply_patch
+    if [ "y" = "$binarymode" ]; then
+        version_ctrl
+        rm -rf *
+        git checkout -q .
+    else # text mode
+        version_ctrl
+        apply_patch
+    fi
 
     cd "$current_dir"
     if [ -z "$o" ]; then
@@ -61,7 +70,7 @@ dec_dir() {
 
     if [ "$t" == "." -o "$t" == ".." ]; then
         echo "$t: Please specify a normal directory"
-        exit 0
+        exit 1
     fi
 
     if [ ! -z "$o" ]; then
@@ -78,7 +87,7 @@ dec_dir() {
     else
         if [ -e "$t/.git" ]; then
             echo "$t/.git: Aborting"
-            exit 0
+            exit 1
         fi
 
         cd "$t"
@@ -93,20 +102,21 @@ dec_dir() {
 dec() {
     local t="$1"
     local o="$2"
+    local binarymode="$3"
 
     if [ ! -e "$t" ]; then
         echo "$t: No such file or directory"
-        exit 0
+        exit 1
     fi
 
     if [ -f "$t" ]; then
-        dec_file "$t" "$o"
+        dec_file "$t" "$o" "$binarymode"
     else
         dec_dir "$t" "$o"
     fi
 }
 
-while getopts "t:o:h" arg
+while getopts "t:o:bh" arg
 do
     case $arg in
         t)
@@ -114,6 +124,9 @@ do
             ;;
         o)
             output=$OPTARG
+            ;;
+        b)
+            binarymode="y"
             ;;
         h)
             print_usage
@@ -127,5 +140,5 @@ if [ -z "$target" ]; then
     exit 0
 fi
 
-dec "$target" "$output"
+dec "$target" "$output" "$binarymode"
 

@@ -42,7 +42,7 @@
             "source": "Windows.Terminal.PowershellCore",
             "cursorShape": "filledBox",
             "fontFace": "FiraCode Nerd Font Mono",
-            "fontSize": 11,
+            "fontSize": 12,
             "padding": "0, 0, 0, 0",
             "useAcrylic": true,
             "acrylicOpacity": 0.9,
@@ -127,7 +127,7 @@
     // To learn more about actions and keybindings, visit https://aka.ms/terminal-keybindings
     "actions":
     [
-        { "command": "closeTab", "keys": "alt+c" },
+        //{ "command": "closeTab", "keys": "alt+c" },
         { "command": "nextTab", "keys": "alt+n" },
         { "command": "prevTab", "keys": "alt+p" },
         { "command": "newTab", "keys": "alt+o" },

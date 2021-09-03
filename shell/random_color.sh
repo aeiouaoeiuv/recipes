@@ -60,6 +60,12 @@ bgcolor() { # background color
 fgcolor() { # foreground color
     echo -e "\033[38;2;${1}m"
 }
+bgcolor_256() { # 256 color background
+    echo -e "\033[48;5;${1}m"
+}
+fgcolor_256() { # 256 color foreground
+    echo -e "\033[38;5;${1}m"
+}
 defbgcolor() { # default background color
     echo -e "\033[49m"
 }
@@ -75,6 +81,7 @@ print_usage() {
 Options:
     --rgb               text displayed in rgb
     --hex               text displayed in hex(default in hex)
+    --256               text displayed in 256 color
     --count N           display N times colors(N >= 0, default 8)
     -h|--help           this help
 
@@ -86,9 +93,30 @@ Examples:
 
 }
 
+display_256_color() {
+    local count="$1"
+    local fg_8bit
+    local bg_8bit
+
+    for i in $(seq "$count"); do
+        fg_8bit=$(shuf -i0-255 -n1)
+        bg_8bit=$(shuf -i0-255 -n1)
+
+        echo ""
+        printf "$i: $(fgcolor_256 "${bg_8bit}")$(defbgcolor)$(reverse)$(rscolor)$(bgcolor_256 "${bg_8bit}")$(fgcolor_256 "${fg_8bit}") fg_rgb: %03d bg_rgb: %03d $(fgcolor_256 "${bg_8bit}")$(defbgcolor)$(rscolor)\n" \
+            "${fg_8bit}" "${bg_8bit}"
+    done
+    echo ""
+}
+
 main() {
     local target="$1"
     local count="$2"
+
+    if [ "$target" == "256" ]; then
+        display_256_color "$count"
+        return
+    fi
 
     for i in $(seq "$count"); do
         read -r text_bg text_fg < <(generate_color_pair)
@@ -111,8 +139,9 @@ main() {
 g_target="hex"
 g_count="8"
 
-if ! ARGS=$(getopt -a -o lh -l list,rgb,hex,count:,help -- "$@"); then
+if ! ARGS=$(getopt -a -o lh -l list,rgb,hex,256,count:,help -- "$@"); then
     print_usage
+    exit 1
 fi
 eval set -- "${ARGS}"
 while true; do
@@ -123,6 +152,10 @@ while true; do
         ;;
     --rgb)
         g_target="rgb"
+        shift
+        ;;
+    --256)
+        g_target="256"
         shift
         ;;
     --count)

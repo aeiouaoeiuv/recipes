@@ -98,46 +98,36 @@ Options:
     -h|--help           this help
 
 Examples:
-    1: %s --rgb
+    1: %s --256
     2: %s --hex
     3: %s --rgb --count 3
 " "$0" "$0" "$0" "$0"
 
 }
 
-display_256_color() {
-    local count="$1"
+main() {
+    local target="$1"
+    local count="$2"
     local fg_8bit
     local bg_8bit
 
     for i in $(seq "$count"); do
-        fg_8bit=$(shuf -i0-255 -n1)
-        bg_8bit=$(shuf -i0-255 -n1)
-
-        echo ""
-        printf "$i: $(fgcolor_256 "${bg_8bit}")$(defbgcolor)$(reverse)$(rscolor)$(bgcolor_256 "${bg_8bit}")$(fgcolor_256 "${fg_8bit}") fg_rgb: %03d bg_rgb: %03d $(fgcolor_256 "${bg_8bit}")$(defbgcolor)$(rscolor)\n" \
-            "${fg_8bit}" "${bg_8bit}"
-    done
-    echo ""
-}
-
-main() {
-    local target="$1"
-    local count="$2"
-
-    if [ "$target" == "256" ]; then
-        display_256_color "$count"
-        return
-    fi
-
-    for i in $(seq "$count"); do
-        # read -r text_bg text_fg < <(generate_color_pair_check_gray_level)
-        read -r text_bg text_fg < <(generate_color_pair)
-
         if [ "$target" == "rgb" ]; then
+            read -r text_bg text_fg < <(generate_color_pair)
+
             echo ""
-            echo "$i: $(fgcolor "${text_bg}")$(defbgcolor)$(reverse)$(rscolor)$(bgcolor "${text_bg}")$(fgcolor "${text_fg}") fg_rgb: ${text_fg} bg_rgb: ${text_bg} $(fgcolor "${text_bg}")$(defbgcolor)$(rscolor)"
+            printf "$i: $(fgcolor "${text_bg}")$(defbgcolor)$(reverse)$(rscolor)$(bgcolor "${text_bg}")$(fgcolor "${text_fg}") fg_rgb: %-11s bg_rgb: %-11s $(fgcolor "${text_bg}")$(defbgcolor)$(rscolor)\n" \
+                "${text_fg}" "${text_bg}"
+        elif [ "$target" == "256" ]; then
+            fg_8bit=$(shuf -i0-255 -n1)
+            bg_8bit=$(shuf -i0-255 -n1)
+
+            echo ""
+            printf "$i: $(fgcolor_256 "${bg_8bit}")$(defbgcolor)$(reverse)$(rscolor)$(bgcolor_256 "${bg_8bit}")$(fgcolor_256 "${fg_8bit}") fg_rgb: %-3d bg_rgb: %-3d $(fgcolor_256 "${bg_8bit}")$(defbgcolor)$(rscolor)\n" \
+                "${fg_8bit}" "${bg_8bit}"
         else
+            read -r text_bg text_fg < <(generate_color_pair)
+
             IFS=';' read -ra bg_rgb_arr <<< "$text_bg"
             IFS=';' read -ra fg_rgb_arr <<< "$text_fg"
             echo ""

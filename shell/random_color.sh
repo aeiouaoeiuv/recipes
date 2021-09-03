@@ -24,6 +24,18 @@ generate_color_pair() {
     read -r bg_r bg_g bg_b < <(generate_rgb)
     local bg_color="${bg_r};${bg_g};${bg_b}"
 
+    local fg_r fg_g fg_b
+    read -r fg_r fg_g fg_b < <(generate_rgb)
+    local fg_color="${fg_r};${fg_g};${fg_b}"
+
+    echo "${bg_color} ${fg_color}"
+}
+
+generate_color_pair_check_gray_level() {
+    local bg_r bg_g bg_b
+    read -r bg_r bg_g bg_b < <(generate_rgb)
+    local bg_color="${bg_r};${bg_g};${bg_b}"
+
     local bg_gray_level
     read -r bg_gray_level < <(calc_gray_level "${bg_r}" "${bg_g}" "${bg_b}")
 
@@ -119,6 +131,7 @@ main() {
     fi
 
     for i in $(seq "$count"); do
+        # read -r text_bg text_fg < <(generate_color_pair_check_gray_level)
         read -r text_bg text_fg < <(generate_color_pair)
 
         if [ "$target" == "rgb" ]; then

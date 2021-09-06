@@ -80,6 +80,11 @@
         "morePosition": "chrome",
         "morePinned": "unpinned",
         "whitelist": []
+      },
+      {
+        "direct": "UL",
+        "action": "G_back",
+        "whitelist": []
       }
     ]
   },

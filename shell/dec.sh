@@ -10,14 +10,13 @@ print_usage() {
     printf "Usage:
     -t VALUE   target to decode, [VALUE] is file or dir
     -o VALUE   output dir, [VALUE] is output dir
-    -b         binary mode, only support for target is file, default text mode
     -h         this help
 "
 }
 
 apply_patch() {
     git show > "$patch_name"
-    rm -rf * .git
+    rm -rf ./* .git
     patch -s -p1 -i "$patch_name"
 }
 
@@ -33,11 +32,35 @@ version_ctrl() {
     git commit -m "initial commit" --quiet
 }
 
+dec_file_v2() {
+    local target="$1"
+    local output_dir="$2"
+    local base_name
+    base_name=$(basename "$target")
+    local prefix=${base_name%%.*}
+    local suffix=${base_name##$prefix}
+    local new_filename="${prefix}${suffix}_placeholder"
+
+    if [ -z "$output_dir" ]; then
+        vim "$target" -c "wq $new_filename" && \
+        chmod --reference="$target" "$new_filename" && \
+        mv "$new_filename" "$target"
+    else
+        if [ ! -d "$output_dir" ]; then
+            mkdir -p "$output_dir"
+        fi
+        vim "$target" -c "wq ${output_dir}/$new_filename" && \
+        chmod --reference="$target" "${output_dir}/$new_filename" && \
+        mv "${output_dir}/$new_filename" "${output_dir}/$base_name"
+    fi
+}
+
 dec_file() {
     local t="$1"
     local o="$2"
     local binarymode="$3"
-    local b=$(basename "$t")
+    local b
+    b=$(basename "$t")
 
     mkdir -p "$hidden_dir"
     cp -f "$t" "$hidden_dir"
@@ -45,7 +68,7 @@ dec_file() {
 
     if [ "y" = "$binarymode" ]; then
         version_ctrl
-        rm -rf *
+        rm -rf ./*
         git checkout -q .
     else # text mode
         version_ctrl
@@ -64,20 +87,35 @@ dec_file() {
     rm -rf "$hidden_dir" "$patch_name"
 }
 
+dec_dir_v2() {
+    local target="$1"
+    local output_dir="$2"
+    local files_separated_by_enter
+
+    # For bash 4.x, must not be in posix mode, may use temporary files
+    mapfile -t files_separated_by_enter < <(find "$target" -type f -not -path '*/\.git/*' -not -path '*/\.svn*' \( ! -name ".git" \) )
+    #local files_separated_by_space="${files_separated_by_enter//$'\n'/ }"
+
+    for each_file in "${files_separated_by_enter[@]}"; do
+        dec_file_v2 "$each_file" "$output_dir"
+    done
+}
+
 dec_dir() {
     local t="$1"
     local o="$2"
+    local b
 
-    if [ "$t" == "." -o "$t" == ".." ]; then
+    if [ "$t" == "." ] || [ "$t" == ".." ]; then
         echo "$t: Please specify a normal directory"
         exit 1
     fi
 
-    if [ ! -z "$o" ]; then
+    if [ -n "$o" ]; then
         if [ ! -d "$o" ]; then
             mkdir -p "$o"
         fi
-        local b=$(basename "$t")
+        b=$(basename "$t")
         cp -rf "$t" "$o"
         cd "$o/$b"
 
@@ -100,45 +138,43 @@ dec_dir() {
 }
 
 dec() {
-    local t="$1"
-    local o="$2"
-    local binarymode="$3"
+    local target="$1"
+    local output_dir="$2"
 
-    if [ ! -e "$t" ]; then
-        echo "$t: No such file or directory"
+    if [ ! -e "$target" ]; then
+        echo "$target: No such file or directory"
         exit 1
     fi
 
-    if [ -f "$t" ]; then
-        dec_file "$t" "$o" "$binarymode"
+    if [ -f "$target" ]; then
+        dec_file_v2 "$target" "$output_dir" "$binarymode"
     else
-        dec_dir "$t" "$o"
+        dec_dir_v2 "$target" "$output_dir"
     fi
 }
 
-while getopts "t:o:bh" arg
-do
+while getopts "t:o:h" arg; do
     case $arg in
         t)
-            target=$OPTARG
+            g_target=$OPTARG
             ;;
         o)
-            output=$OPTARG
-            ;;
-        b)
-            binarymode="y"
+            g_output_dir=$OPTARG
             ;;
         h)
             print_usage
             exit 0
             ;;
+        *)
+            print_usage
+            ;;
     esac
 done
 
-if [ -z "$target" ]; then
+if [ -z "$g_target" ]; then
     print_usage
     exit 0
 fi
 
-dec "$target" "$output" "$binarymode"
+dec "$g_target" "$g_output_dir"
 

@@ -24,8 +24,8 @@ AptInstallTools()
     sudo apt update
 
     local packages="gcc g++ perl autoconf libssl-dev libncurses5-dev net-tools openssh-server make"
-    local arr=($packages)
-    for p in ${arr[@]}; do
+    local arr=("$packages")
+    for p in "${arr[@]}"; do
         if dpkg -s "$p" >/dev/null 2>&1; then
             continue # package already installed
         fi

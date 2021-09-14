@@ -32,6 +32,14 @@ version_ctrl() {
     git commit -m "initial commit" --quiet
 }
 
+generate_random_string() {
+    if [ -e "/proc/sys/kernel/random/uuid" ]; then
+        g_random_string=$(</proc/sys/kernel/random/uuid)
+    else
+        g_random_string=$(echo $RANDOM | md5sum | awk '{print $1}')
+    fi
+}
+
 dec_file_v2() {
     local target="$1"
     local output_dir="$2"
@@ -39,7 +47,9 @@ dec_file_v2() {
     base_name=$(basename "$target")
     local prefix=${base_name%%.*}
     local suffix=${base_name##$prefix}
-    local new_filename="${prefix}${suffix}_placeholder"
+
+    generate_random_string
+    local new_filename="${prefix}${suffix}${g_random_string}"
 
     if [ -z "$output_dir" ]; then
         vim "$target" -c "wq $new_filename" && \
@@ -167,6 +177,7 @@ while getopts "t:o:h" arg; do
             ;;
         *)
             print_usage
+            exit 1
             ;;
     esac
 done

@@ -24,24 +24,32 @@
     "dtooltipwidth": "20",
     "image": [
       {
+        "action": "I_open",
         "direct": "R",
-        "action": "I_open",
         "moreDes": "打开图片",
-        "moreTarget": "newfront",
+        "morePinned": "unpinned",
         "morePosition": "chrome",
-        "morePinned": "unpinned"
+        "moreTarget": "newfront"
       },
       {
+        "action": "I_open",
         "direct": "L",
-        "action": "I_open",
         "moreDes": "打开图片",
-        "moreTarget": "newback",
+        "morePinned": "unpinned",
         "morePosition": "chrome",
-        "morePinned": "unpinned"
+        "moreTarget": "newback"
       },
       {
-        "direct": "U",
-        "action": "I_copyurl"
+        "action": "I_copyurl",
+        "direct": "U"
+      },
+      {
+        "action": "I_open",
+        "direct": "D",
+        "moreDes": "打开图片",
+        "morePinned": "unpinned",
+        "morePosition": "chrome",
+        "moreTarget": "curfront"
       }
     ],
     "imgfirst": "none",
@@ -64,8 +72,16 @@
         "moreTarget": "newfront"
       },
       {
-        "direct": "U",
-        "action": "L_copyurl"
+        "action": "L_copyurl",
+        "direct": "U"
+      },
+      {
+        "action": "L_open",
+        "direct": "D",
+        "moreDes": "打开链接",
+        "morePinned": "unpinned",
+        "morePosition": "chrome",
+        "moreTarget": "curfront"
       }
     ],
     "setdragurl": true,
@@ -80,23 +96,32 @@
         "moreTsearch": "sgoogle"
       },
       {
-        "direct": "L",
         "action": "T_search",
+        "direct": "L",
         "moreDes": "使用%name搜索\"%s\"",
-        "moreTsearch": "sgoogle",
-        "moreTarget": "newback",
+        "morePinned": "unpinned",
         "morePosition": "right",
-        "morePinned": "unpinned"
+        "moreTarget": "newback",
+        "moreTsearch": "sgoogle"
       },
       {
-        "direct": "U",
         "action": "T_searchuser",
-        "moreName": "有道搜索",
-        "moreURL": "https://youdao.com/w/%s",
+        "direct": "U",
         "moreDes": "使用%name搜索\"%s\"",
-        "moreTarget": "newfront",
+        "moreName": "有道搜索",
+        "morePinned": "unpinned",
         "morePosition": "chrome",
-        "morePinned": "unpinned"
+        "moreTarget": "newfront",
+        "moreURL": "https://youdao.com/w/%s"
+      },
+      {
+        "action": "T_search",
+        "direct": "D",
+        "moreDes": "使用%name搜索\"%s\"",
+        "morePinned": "unpinned",
+        "morePosition": "chrome",
+        "moreTarget": "curfront",
+        "moreTsearch": "sgoogle"
       }
     ]
   },

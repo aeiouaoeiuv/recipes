@@ -103,7 +103,7 @@ dec_dir_v2() {
     local files_separated_by_enter
 
     # For bash 4.x, must not be in posix mode, may use temporary files
-    mapfile -t files_separated_by_enter < <(find "$target" -type f -not -path '*/\.git/*' -not -path '*/\.svn*' \( ! -name ".git" \) )
+    mapfile -t files_separated_by_enter < <(find "$target" -type f -not -path '*/\.git/*' -not -path '*/\.svn*' \( ! -name ".git" \))
     #local files_separated_by_space="${files_separated_by_enter//$'\n'/ }"
 
     for each_file in "${files_separated_by_enter[@]}"; do
@@ -157,7 +157,7 @@ dec() {
     fi
 
     if [ -f "$target" ]; then
-        dec_file_v2 "$target" "$output_dir" "$binarymode"
+        dec_file_v2 "$target" "$output_dir"
     else
         dec_dir_v2 "$target" "$output_dir"
     fi

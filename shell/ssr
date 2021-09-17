@@ -86,7 +86,7 @@ ssr_test() {
     curl ipinfo.io --socks5 localhost:"$PORT"
     echo
     if curl cip.cc --socks5 localhost:"$PORT"; then
-        if [ -z "$(command -v proxychains4)" ]; then
+        if [ -n "$(command -v proxychains4)" ]; then
             echo "You may install proxychains4 and configure it properly to test net delay"
         else
             echo -e '\nChecking delay...'

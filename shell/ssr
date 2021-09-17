@@ -21,7 +21,7 @@ GIT_REPO=https://github.com/shadowsocksrr/shadowsocksr.git
 INSTALL_PATH=$HOME/.local/share/shadowsocksr
 
 get_config_file_port() {
-    if [ -z "$(command -v jq)" ]; then
+    if [ -n "$(command -v jq)" ]; then
         echo 'jq in use'
         if $CONFIG_FILE_ENCRYPTED; then
             local decrypt_text

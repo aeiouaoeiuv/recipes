@@ -21,5 +21,6 @@ cp -f aria2.conf ${HOME}/.local/etc
 
 ```
 aria2c --conf-path=${HOME}/.local/etc/aria2.conf
+# -D 是后台运行
 ```
 

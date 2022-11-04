@@ -157,6 +157,21 @@ install_docker() {
     cd ${top_dir} && rm -rf ${filename}
 }
 
+install_docker_compose() {
+    echo "========> docker compose"
+
+    DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+    if [ -e "$DOCKER_CONFIG/cli-plugins/docker-compose" ]; then
+        echo "docker compose installed, skip now"
+        return
+    fi
+
+    mkdir -p $DOCKER_CONFIG/cli-plugins
+    local download_url="${ghproxy}https://github.com/docker/compose/releases/download/v2.12.2/docker-compose-linux-x86_64"
+    echo "Downloading ${download_url}"
+    curl -SL ${download_url} -o $DOCKER_CONFIG/cli-plugins/docker-compose
+}
+
 install_fzf() {
     echo "========> fzf"
 
@@ -187,6 +202,7 @@ main() {
     install_dufs
     install_nvim
     install_docker
+    install_docker_compose
     install_fzf
 }
 

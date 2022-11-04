@@ -169,7 +169,8 @@ install_docker_compose() {
     mkdir -p $DOCKER_CONFIG/cli-plugins
     local download_url="${ghproxy}https://github.com/docker/compose/releases/download/v2.12.2/docker-compose-linux-x86_64"
     echo "Downloading ${download_url}"
-    curl -SL ${download_url} -o $DOCKER_CONFIG/cli-plugins/docker-compose
+    curl -SL ${download_url} -o $DOCKER_CONFIG/cli-plugins/docker-compose \
+        && chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
 }
 
 install_fzf() {
